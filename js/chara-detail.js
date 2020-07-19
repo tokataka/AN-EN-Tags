@@ -2666,14 +2666,14 @@
 
         if(tokenname){
             for (var token_id in tokendataFull) {
-                $("#token"+elite_no+"maxHp").html(TokenStatsInterpolation('maxHp',level,elite_no,token_id));
-                $("#token"+elite_no+"def").html(TokenStatsInterpolation('def',level,elite_no,token_id));
-                $("#token"+elite_no+"atk").html(TokenStatsInterpolation('atk',level,elite_no,token_id));
-                $("#token"+elite_no+"magicResistance").html(TokenStatsInterpolation('magicResistance',level,elite_no,token_id));
-                $("#token"+elite_no+"respawnTime").html(TokenStatsInterpolation('respawnTime',level,elite_no,token_id)+`<div style='display:inline;font-size:10px'> Sec</div>`);
-                $("#token"+elite_no+"cost").html(TokenStatsInterpolation('cost',level,elite_no,token_id));
-                $("#token"+elite_no+"blockCnt").html(TokenStatsInterpolation('blockCnt',level,elite_no,token_id));
-                $("#token"+elite_no+"baseAttackTime").html(TokenStatsInterpolation('baseAttackTime',level,elite_no,token_id,false)+`<div style='display:inline;font-size:10px'> Sec</div>`);
+                $("#token"+token_id+"elite"+elite_no+"maxHp").html(TokenStatsInterpolation('maxHp',level,elite_no,token_id));
+                $("#token"+token_id+"elite"+elite_no+"def").html(TokenStatsInterpolation('def',level,elite_no,token_id));
+                $("#token"+token_id+"elite"+elite_no+"atk").html(TokenStatsInterpolation('atk',level,elite_no,token_id));
+                $("#token"+token_id+"elite"+elite_no+"magicResistance").html(TokenStatsInterpolation('magicResistance',level,elite_no,token_id));
+                $("#token"+token_id+"elite"+elite_no+"respawnTime").html(TokenStatsInterpolation('respawnTime',level,elite_no,token_id)+`<div style='display:inline;font-size:10px'> Sec</div>`);
+                $("#token"+token_id+"elite"+elite_no+"cost").html(TokenStatsInterpolation('cost',level,elite_no,token_id));
+                $("#token"+token_id+"elite"+elite_no+"blockCnt").html(TokenStatsInterpolation('blockCnt',level,elite_no,token_id));
+                $("#token"+token_id+"elite"+elite_no+"baseAttackTime").html(TokenStatsInterpolation('baseAttackTime',level,elite_no,token_id,false)+`<div style='display:inline;font-size:10px'> Sec</div>`);
             }
         }
     }
