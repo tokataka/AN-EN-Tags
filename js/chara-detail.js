@@ -1657,7 +1657,7 @@
         if(tokenname){
             for (k in tokendataFull) {
                 statsTable.append($(`
-                    <div align="center" style="padding-top: 10px;">Token skill ${int(k)+1}</div>
+                    <div align="center" style="padding-top: 10px;">Token${Object.keys(tokendataFull).length == 1 ? "" : " skill " + (int(k) + 1)}</div>
                     <table id='token${k}elite${i}StatsTable'>
                         <tr><td>
         
