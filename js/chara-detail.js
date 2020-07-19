@@ -1073,7 +1073,16 @@
 
             tokenname = opdataFull.tokenKey
             if(tokenname){
-                tokendataFull = db.chars[tokenname]
+                var done = []
+                for (i in opdataFull.skills) {
+                    var skilltoken = opdataFull.skills[i].overrideTokenKey
+                    if (skilltoken== null) skilltoken = tokenname
+
+                    if (done.includes(skilltoken)) continue
+
+                    tokendataFull[i] = db.chars[skilltoken]
+                    done.append(skilltoken)
+                }
             } else {
                 tokendataFull = {}
             }
@@ -1646,26 +1655,28 @@
         `);
 
         if(tokenname){
-            statsTable.append($(`
-                <div align="center" style="padding-top: 10px;">Token</div>
-                <table id='token${i}StatsTable'>
-                    <tr><td>
-    
-                        <div class='stats'><div class='stats-l'>Maximum HP</div><div class='stats-r' id='token${i}maxHp'></div></div>
-                        <div class='stats'><div class='stats-l'>Redeploy Time</div><div class='stats-r' id='token${i}respawnTime'></div></div>
-                        
-                        <div class='stats'><div class='stats-l'>Attack Power</div><div class='stats-r' id='token${i}atk'></div></div>
-                        <div class='stats'><div class='stats-l'>Cost</div><div class='stats-r' id='token${i}cost'></div></div>
-                        
-                        <div class='stats'><div class='stats-l'>Defense</div><div class='stats-r' id='token${i}def'></div></div>
-                        <div class='stats'><div class='stats-l'>Block</div><div class='stats-r' id='token${i}blockCnt'></div></div>
-    
-                        <div class='stats'><div class='stats-l'>Magic Resistance</div><div class='stats-r' id='token${i}magicResistance'></div></div>
-                        <div class='stats'><div class='stats-l'>Attack Time</div><div class='stats-r' id='token${i}baseAttackTime'></div></div>
-                    </tr><td>
-                </table>
-                ${rangeMaker(tokendataFull.phases[i].rangeId)}
-            `));
+            for (k in tokendataFull) {
+                statsTable.append($(`
+                    <div align="center" style="padding-top: 10px;">Token skill ${k+1}</div>
+                    <table id='token${k}elite${i}StatsTable'>
+                        <tr><td>
+        
+                            <div class='stats'><div class='stats-l'>Maximum HP</div><div class='stats-r' id='token${k}elite${i}maxHp'></div></div>
+                            <div class='stats'><div class='stats-l'>Redeploy Time</div><div class='stats-r' id='token${k}elite${i}respawnTime'></div></div>
+                            
+                            <div class='stats'><div class='stats-l'>Attack Power</div><div class='stats-r' id='token${k}elite${i}atk'></div></div>
+                            <div class='stats'><div class='stats-l'>Cost</div><div class='stats-r' id='token${k}elite${i}cost'></div></div>
+                            
+                            <div class='stats'><div class='stats-l'>Defense</div><div class='stats-r' id='token${k}elite${i}def'></div></div>
+                            <div class='stats'><div class='stats-l'>Block</div><div class='stats-r' id='token${k}elite${i}blockCnt'></div></div>
+        
+                            <div class='stats'><div class='stats-l'>Magic Resistance</div><div class='stats-r' id='token${k}elite${i}magicResistance'></div></div>
+                            <div class='stats'><div class='stats-l'>Attack Time</div><div class='stats-r' id='token${k}elite${i}baseAttackTime'></div></div>
+                        </tr><td>
+                    </table>
+                    ${rangeMaker(tokendataFull[k].phases[i].rangeId)}
+                `));
+            }
         }
 
         statsTable.append($(` 
@@ -2654,14 +2665,16 @@
         $("#elite"+elite_no+"baseAttackTime").html(statsInterpolation('baseAttackTime',level,elite_no,false)+`<div style='display:inline;font-size:10px'> Sec</div>`);
 
         if(tokenname){
-            $("#token"+elite_no+"maxHp").html(TokenStatsInterpolation('maxHp',level,elite_no));
-            $("#token"+elite_no+"def").html(TokenStatsInterpolation('def',level,elite_no));
-            $("#token"+elite_no+"atk").html(TokenStatsInterpolation('atk',level,elite_no));
-            $("#token"+elite_no+"magicResistance").html(TokenStatsInterpolation('magicResistance',level,elite_no));
-            $("#token"+elite_no+"respawnTime").html(TokenStatsInterpolation('respawnTime',level,elite_no)+`<div style='display:inline;font-size:10px'> Sec</div>`);
-            $("#token"+elite_no+"cost").html(TokenStatsInterpolation('cost',level,elite_no));
-            $("#token"+elite_no+"blockCnt").html(TokenStatsInterpolation('blockCnt',level,elite_no));
-            $("#token"+elite_no+"baseAttackTime").html(TokenStatsInterpolation('baseAttackTime',level,elite_no,false)+`<div style='display:inline;font-size:10px'> Sec</div>`);
+            for (var token_id in tokendataFull) {
+                $("#token"+elite_no+"maxHp").html(TokenStatsInterpolation('maxHp',level,elite_no,token_id));
+                $("#token"+elite_no+"def").html(TokenStatsInterpolation('def',level,elite_no,token_id));
+                $("#token"+elite_no+"atk").html(TokenStatsInterpolation('atk',level,elite_no,token_id));
+                $("#token"+elite_no+"magicResistance").html(TokenStatsInterpolation('magicResistance',level,elite_no,token_id));
+                $("#token"+elite_no+"respawnTime").html(TokenStatsInterpolation('respawnTime',level,elite_no,token_id)+`<div style='display:inline;font-size:10px'> Sec</div>`);
+                $("#token"+elite_no+"cost").html(TokenStatsInterpolation('cost',level,elite_no,token_id));
+                $("#token"+elite_no+"blockCnt").html(TokenStatsInterpolation('blockCnt',level,elite_no,token_id));
+                $("#token"+elite_no+"baseAttackTime").html(TokenStatsInterpolation('baseAttackTime',level,elite_no,token_id,false)+`<div style='display:inline;font-size:10px'> Sec</div>`);
+            }
         }
     }
 
@@ -2684,9 +2697,9 @@
         
     }
 
-    function TokenStatsInterpolation(key,level,elite_no,isround=true){
+    function TokenStatsInterpolation(key,level,elite_no,token_id,isround=true){
         var kf = [];
-        $.each(tokendataFull.phases[elite_no].attributesKeyFrames,function(j,v){
+        $.each(tokendataFull[token_id].phases[elite_no].attributesKeyFrames,function(j,v){
             kf[j] = v;
         });
         // console.log([kf[0].level,kf[1].level])
