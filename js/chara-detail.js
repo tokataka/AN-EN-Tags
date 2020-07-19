@@ -1081,7 +1081,7 @@
                     if (done.includes(skilltoken)) continue
 
                     tokendataFull[i] = db.chars[skilltoken]
-                    done.append(skilltoken)
+                    done.push(skilltoken)
                 }
             } else {
                 tokendataFull = {}
